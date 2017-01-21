@@ -6,6 +6,7 @@ public class MatrixOfBalls : MonoBehaviour
     public const int BallLayer = 8;
 
 
+    public GameObject Player;
     public GameObject Ball;
     public int Height;
     public int Width;
@@ -40,6 +41,7 @@ public class MatrixOfBalls : MonoBehaviour
             }
 	    }
 
+        colliders.Add(new ClothSphereColliderPair(Player.GetComponent<SphereCollider>()));
         cloth.sphereColliders = colliders.ToArray();
     }
 

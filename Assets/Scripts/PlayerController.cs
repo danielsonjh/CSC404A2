@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
@@ -27,7 +25,7 @@ public class PlayerController : MonoBehaviour {
 		//Quaternion target = Quaternion.Euler (0, angle, 0);
 		//transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime);
 		//transform.eulerAngles = new Vector3(0.0f, angle, 0.0f);
-		rb.AddForce (dir * speed);
+		rb.velocity =  rb.velocity + dir.normalized*speed;
 
 		//transform.Translate (movement * speed);
 	}
