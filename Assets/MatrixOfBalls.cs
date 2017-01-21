@@ -14,18 +14,19 @@ public class MatrixOfBalls : MonoBehaviour
     
 
     void Start ()
-	{
-        transform.position = new Vector3(-Width/2f, 0, -Height/2f);
+    {
+        var cloth = FindObjectOfType<Cloth>();
+        var colliders = new List<ClothSphereColliderPair>();
 
-	    for (int x = 0; x < Width; x++)
+        var scale = Ball.transform.localScale.x;
+        var offset = new Vector3(scale*(-Width/2f + 0.5f), 0, scale*(-Height/2f + 0.5f));
+        for (int x = 0; x < Width; x++)
 	    {
 	        for (int z = 0; z < Height; z++)
 	        {
 	            var ball = Instantiate(Ball);
-                var position = new Vector3(x, 0, z);
-	            ball.transform.SetParent(transform);
-	            ball.transform.localPosition = position;
-//	            ball.GetComponent<Ball>().InitPosition = position;
+                var position = offset + new Vector3(x * scale, 0, z * scale);
+	            ball.transform.position = position;
 	            _ballDict[position] = ball;
 
 	            var adjacentPositions = new [] { position + Vector3.left, position + Vector3.back };
@@ -34,14 +35,18 @@ public class MatrixOfBalls : MonoBehaviour
 	            {
                     ConnectToAdjacentBall(ball, adjacentPositions[i], i);
 	            }
+
+                colliders.Add(new ClothSphereColliderPair(ball.GetComponent<SphereCollider>()));
             }
 	    }
-	}
+
+        cloth.sphereColliders = colliders.ToArray();
+    }
 
     void Update()
     {
-//        if (Input.GetMouseButtonUp(0))
-//        {
+        if (Input.GetMouseButtonUp(0))
+        {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             Physics.Raycast(ray, out hit, 100, 1 << BallLayer);
@@ -49,14 +54,19 @@ public class MatrixOfBalls : MonoBehaviour
             {
                 hit.transform.GetComponent<Ball>().Click();
             }
-//        }
+        }
     }
 
     private void ConnectToAdjacentBall(GameObject ball, Vector3 position, int index)
     {
         if (_ballDict.ContainsKey(position))
         {
-            ball.GetComponents<HingeJoint>()[index].connectedBody = _ballDict[position].GetComponent<Rigidbody>();
+            ball.GetComponents<SpringJoint>()[index].connectedBody = _ballDict[position].GetComponent<Rigidbody>();
+
+            Debug.Log("Connect");
+            Debug.Log(ball.transform.localPosition);
+            Debug.Log(ball.GetComponents<SpringJoint>()[index].anchor);
+            Debug.Log(ball.GetComponents<SpringJoint>()[index].connectedAnchor);
         }
     }
 }

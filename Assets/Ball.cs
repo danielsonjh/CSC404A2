@@ -11,6 +11,6 @@ public class Ball : MonoBehaviour
     public void Click()
     {
         Debug.Log(transform.position);
-        GetComponent<Rigidbody>().AddForce(Vector3.up * 10, ForceMode.Impulse);
+        GetComponent<Rigidbody>().AddForce(Vector3.up * 20, ForceMode.Impulse);
     }
 }
