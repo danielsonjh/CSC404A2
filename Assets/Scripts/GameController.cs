@@ -1,24 +1,4 @@
 ﻿using System.Collections;
-<<<<<<< HEAD
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GameController : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-
-	void generateBonus () {
-		
-	}
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
-=======
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -65,5 +45,4 @@ public class GameController : MonoBehaviour {
     {
         SceneManager.LoadScene("Balls");
     }
->>>>>>> origin/master
 }
