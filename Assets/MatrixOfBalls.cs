@@ -15,7 +15,7 @@ public class MatrixOfBalls : MonoBehaviour
 
     void Start ()
 	{
-        transform.position = new Vector3(-Width/2f, 0, -Height/2f);
+        transform.position = new Vector3(-Width / 2f + 0.5f, 0, -Height/ 2f + 0.5f);
 
 	    for (int x = 0; x < Width; x++)
 	    {
@@ -40,8 +40,8 @@ public class MatrixOfBalls : MonoBehaviour
 
     void Update()
     {
-//        if (Input.GetMouseButtonUp(0))
-//        {
+        if (Input.GetMouseButtonUp(0))
+        {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             Physics.Raycast(ray, out hit, 100, 1 << BallLayer);
@@ -49,14 +49,19 @@ public class MatrixOfBalls : MonoBehaviour
             {
                 hit.transform.GetComponent<Ball>().Click();
             }
-//        }
+        }
     }
 
     private void ConnectToAdjacentBall(GameObject ball, Vector3 position, int index)
     {
         if (_ballDict.ContainsKey(position))
         {
-            ball.GetComponents<HingeJoint>()[index].connectedBody = _ballDict[position].GetComponent<Rigidbody>();
+            ball.GetComponents<SpringJoint>()[index].connectedBody = _ballDict[position].GetComponent<Rigidbody>();
+
+            Debug.Log("Connect");
+            Debug.Log(ball.transform.localPosition);
+            Debug.Log(ball.GetComponents<SpringJoint>()[index].anchor);
+            Debug.Log(ball.GetComponents<SpringJoint>()[index].connectedAnchor);
         }
     }
 }
