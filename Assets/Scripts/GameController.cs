@@ -1,27 +1,48 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
-    public Text countDownText;
-    float currentTime = 60f;
+    public GameObject Panel;
+
+    public Text CountDownText;
+    int _currentTime = 2;
 
 	// Use this for initialization
 	void Start () {
 
-        countDownText.text = currentTime.ToString();
-        StartCoroutine(countDown());
+        CountDownText.text = _currentTime.ToString();
+        StartCoroutine(CountDown());
 	}
 	
-    IEnumerator countDown()
+    IEnumerator CountDown()
     {
-        while (currentTime > 0)
+        while (_currentTime > 0)
         {
             yield return new WaitForSeconds(1);
-            currentTime -= 1;
-            countDownText.text = currentTime.ToString();
+            _currentTime -= 1;
+            CountDownText.text = _currentTime.ToString();
+            if (_currentTime == 0)
+            {
+                Panel.transform.FindChild("WinnerText").GetComponent<Text>().text = "Player Wins";
+                Panel.SetActive(true);
+            }
         }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            Panel.transform.FindChild("WinnerText").GetComponent<Text>().text = "Carpet Wins";
+            Panel.SetActive(true);
+        }
+    }
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("Balls");
     }
 }
